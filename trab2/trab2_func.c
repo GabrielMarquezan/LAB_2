@@ -25,19 +25,35 @@ char** aloca_matriz(int dimensoes[2])
     return matriz;
 }
 
+void insere_barra_zeros(char** matriz, int dimensoes[2])
+{
+    for(int i = 0; i < dimensoes[1]; i++)
+    {
+        matriz[i][dimensoes[0] + 1] = '\0';
+    }
+}
+
 void preenche_matriz(char** matriz, int dimensoes[2])
 {   
-    char guarda_string[dimensoes[0] * dimensoes[1] + 1];
+    int tamanho = ((dimensoes[0] * dimensoes[1])/2 + (dimensoes[0] * dimensoes[1]));
+    char *guarda_string = malloc(tamanho * sizeof(char));
     int contador = 0;
 
     printf("Por favor, insira todos os caracteres de uma vez.\n");
-    gets(guarda_string);
+    scanf("%s", &guarda_string);
+    
+    insere_barra_zeros(matriz, dimensoes);
+    retira_espacos(guarda_string, tamanho);
 
     for(int i = 0; i < dimensoes[1]; i++)
     {
         for(int j = 0; j < dimensoes[0]; j++)
         {
-            matriz[i][j] = guarda_string[contador];
+            if(guarda_string[contador] != '\0')
+            {
+                matriz[i][j] = guarda_string[contador];
+            }
+            else break;
 
             contador++;
         }
@@ -47,20 +63,46 @@ void preenche_matriz(char** matriz, int dimensoes[2])
 void retira_espacos(char guarda_string[], int tamanho)
 {
     char aux[tamanho + 1];
-    int contador = 0;
+    int contador = 0, step = 0;
     char fim = ' ';
 
     while(fim != '\0')
     {
-        switch()
+        switch(step)
         {
             case 0:
                 if(guarda_string[contador] == ' ') continue;
 
                 aux[contador] = guarda_string[contador];
                 fim = aux[contador];
+
+                if(fim == '\0') 
+                {
+                    step = 1;
+                    fim = ' ';
+                    contador = 0;
+                }
+
                 break;
-        
+            
+            case 1:
+                guarda_string[contador] = aux[contador];
+                break;
         }
+
+        contador++;
+    }
+}
+
+void imprime_matriz(char** matriz, int dimensoes[])
+{
+    for(int i = 0; i < dimensoes[1]; i++)
+    {
+        for(int j = 0; j < dimensoes[0]; j++)
+        {
+            printf("%c ", matriz[i][j]);
+        }
+
+        printf("\n");
     }
 }
