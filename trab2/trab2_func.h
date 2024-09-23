@@ -1,11 +1,19 @@
 #ifndef TRAB2_FUNC_H
 #define TRAB2_FUNC_H
 
-void le_dimensoes_matriz(int dimensoes[]);
-char** aloca_matriz(int dimensoes[2]);
-void insere_barra_zeros(char** matriz, int dimensoes[2]);
-void preenche_matriz(char** matriz, int dimensoes[2]);
-void retira_espacos(char guarda_string[], int tamanho);
-void imprime_matriz(char** matriz, int dimensoes[]);
+typedef struct
+{
+    int linhas;
+    int colunas;
+} Dimensoes;
+
+void le_dimensoes_matriz(Dimensoes* dimensoes_da_matriz);
+char** aloca_matriz(Dimensoes dimensoes_da_matriz);
+void insere_barra_zeros(char** matriz, Dimensoes dimensoes_da_matriz);
+void retira_espacos(char texto_para_matriz[], int tamanho_da_entrada);
+void coloca_tudo_em_minusculo(char texto_para_matriz[], int tamanho_da_entrada);
+void formatar_string_para_matriz(char texto_para_matriz[], int tamanho_da_entrada);
+void preenche_matriz(char** matriz, Dimensoes dimensoes_da_matriz);
+void imprime_matriz(char** matriz, Dimensoes dimensoes_da_matriz);
 
 #endif

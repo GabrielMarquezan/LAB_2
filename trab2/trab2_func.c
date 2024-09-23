@@ -2,106 +2,142 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "trab2_func.h"
 
-void le_dimensoes_matriz(int dimensoes[2])
+//única função que altera as informações de "dimensoes_da_matriz"
+void le_dimensoes_matriz(Dimensoes* dimensoes_da_matriz)
 {
     printf("Qual será a largura do seu caça-palavras (colunas)?\n");
-    scanf("%d", &dimensoes[0]);
+    scanf("%d", &dimensoes_da_matriz->colunas);
 
     printf("E a altura (linhas)?\n");
-    scanf("%d", &dimensoes[1]);
+    scanf("%d", &dimensoes_da_matriz->linhas);
 }
 
-char** aloca_matriz(int dimensoes[2])
+char** aloca_matriz(Dimensoes dimensoes_da_matriz)
 {
-    char** matriz = malloc(dimensoes[1] * sizeof(char*));
-
-    for(int i = 0; i < dimensoes[1]; i++)
+    //Aloca as linhas da matriz dinamicamente e testa se houve êxito
+    char** matriz = malloc(dimensoes_da_matriz.linhas * sizeof(char*));
+    if(matriz == NULL)
     {
-        matriz[i] = malloc((dimensoes[0] + 1) * sizeof(char));
+        printf("\n\nErro 1 na função 'aloca_matriz'\n\n");
+        exit(0);
+    }
+
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
+    {
+        //Aloca as colunas da matriz dinamicamente e testa se houve êxito
+        //OBS: (dimensoes_da_matriz.colunas + 1) serve para garantir o espaço do '\0' no fim da linha
+        matriz[i] = malloc((dimensoes_da_matriz.colunas + 1) * sizeof(char));
+        if(matriz[i] == NULL)
+        {
+            printf("\n\nErro 2 na função 'aloca_matriz' - 'i' referente ao erro: %d\n\n", i);
+            exit(0);
+        }
     }
 
     return matriz;
 }
 
-void insere_barra_zeros(char** matriz, int dimensoes[2])
+void insere_barra_zeros(char** matriz, Dimensoes dimensoes_da_matriz)
 {
-    for(int i = 0; i < dimensoes[1]; i++)
+    //Garante que haverá '\0' no fim das linhas
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
     {
-        matriz[i][dimensoes[0] + 1] = '\0';
+        matriz[i][dimensoes_da_matriz.colunas] = '\0';
     }
 }
 
-void preenche_matriz(char** matriz, int dimensoes[2])
+void retira_espacos(char texto_para_matriz[], int tamanho_da_entrada)
+{
+    //Puxa todo o restante do texto para trás quando houver espaço
+    for(int i = 0; i < tamanho_da_entrada; i++)
+    {
+        if(texto_para_matriz[i] == ' ')
+        {
+            for(int j = i; j < tamanho_da_entrada - 1; j++) texto_para_matriz[j] = texto_para_matriz[j+1];
+        }
+    }
+}
+
+void coloca_tudo_em_minusculo(char texto_para_matriz[], int tamanho_da_entrada)
+{
+    char aux = ' ';
+
+    for(int i = 0; i < tamanho_da_entrada; i++)
+    {
+        aux = tolower(texto_para_matriz[i]);
+        texto_para_matriz[i] = aux;
+    }
+}
+
+void formatar_string_para_matriz(char texto_para_matriz[], int tamanho_da_entrada)
+{
+    retira_espacos(texto_para_matriz, tamanho_da_entrada);
+    coloca_tudo_em_minusculo(texto_para_matriz, tamanho_da_entrada);
+}
+
+void preenche_matriz(char** matriz, Dimensoes dimensoes_da_matriz)
 {   
-    int tamanho = ((dimensoes[0] * dimensoes[1])/2 + (dimensoes[0] * dimensoes[1]));
-    char *guarda_string = malloc(tamanho * sizeof(char));
+    /*tamanho_da_entrada recebe um valor arbitrariamente maior que o alocado para garantir que 
+    nada seja truncado pela existência de espaços na entrada do usuário*/
+    int tamanho_da_entrada = (dimensoes_da_matriz.linhas * dimensoes_da_matriz.colunas * 1.5);
     int contador = 0;
 
-    printf("Por favor, insira todos os caracteres de uma vez.\n");
-    scanf("%s", &guarda_string);
-    
-    insere_barra_zeros(matriz, dimensoes);
-    retira_espacos(guarda_string, tamanho);
-
-    for(int i = 0; i < dimensoes[1]; i++)
+    //Aloca o vetor dinamicamente e testa se houve êxito
+    char *texto_para_matriz = malloc(tamanho_da_entrada * sizeof(char));
+    if(texto_para_matriz == NULL)
     {
-        for(int j = 0; j < dimensoes[0]; j++)
-        {
-            if(guarda_string[contador] != '\0')
-            {
-                matriz[i][j] = guarda_string[contador];
-            }
-            else break;
+        printf("\n\nErro 1 na função 'preenche_matriz'\n\n");
+        exit(0);
+    }
+    
+    printf("Por favor, insira todos os caracteres de uma vez.\n");
+    scanf("%s", &texto_para_matriz);
 
+    formatar_string_para_matriz(texto_para_matriz, tamanho_da_entrada);
+
+    //Preenche a matriz com a entrada de dados devidamente tratada
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
+    {
+        for(int j = 0; j < dimensoes_da_matriz.colunas; j++)
+        {
+            if(texto_para_matriz[contador] == '\0') break;
+            
+            matriz[i][j] = texto_para_matriz[contador];
             contador++;
         }
+
+        if(texto_para_matriz[contador] == '\0') break;
     }
+
+    insere_barra_zeros(matriz, dimensoes_da_matriz);
 }
 
-void retira_espacos(char guarda_string[], int tamanho)
+void imprime_matriz(char** matriz, Dimensoes dimensoes_da_matriz)
 {
-    char aux[tamanho + 1];
-    int contador = 0, step = 0;
-    char fim = ' ';
+    printf("\n ");
 
-    while(fim != '\0')
+    //Imprime o índice das colunas
+    for(int i = 0; i < dimensoes_da_matriz.colunas - 1; i++)
     {
-        switch(step)
+        if(i < 9) 
         {
-            case 0:
-                if(guarda_string[contador] == ' ') continue;
-
-                aux[contador] = guarda_string[contador];
-                fim = aux[contador];
-
-                if(fim == '\0') 
-                {
-                    step = 1;
-                    fim = ' ';
-                    contador = 0;
-                }
-
-                break;
-            
-            case 1:
-                guarda_string[contador] = aux[contador];
-                break;
+            printf(" 0%d", i + 1);
         }
-
-        contador++;
+        else printf(" %d", i + 1);
     }
-}
 
-void imprime_matriz(char** matriz, int dimensoes[])
-{
-    for(int i = 0; i < dimensoes[1]; i++)
+    printf("\n");
+
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
     {
-        for(int j = 0; j < dimensoes[0]; j++)
-        {
-            printf("%c ", matriz[i][j]);
-        }
+        //Imprime o índice das linhas
+        printf("%d", i + 1);
+
+        //Imprime o conteúdo da matriz
+        for(int j = 0; j < dimensoes_da_matriz.colunas; j++) printf("  %c", matriz[i][j]);
 
         printf("\n");
     }
