@@ -49,12 +49,12 @@ void insere_barra_zeros(char** matriz, Dimensoes dimensoes_da_matriz)
     }
 }
 
-void retira_espacos(char texto_para_matriz[], int tamanho_da_entrada)
+void retira_char_nulo(char texto_para_matriz[], int tamanho_da_entrada)
 {
     //Puxa todo o restante do texto para trás quando houver espaço
     for(int i = 0; i < tamanho_da_entrada; i++)
     {
-        if(texto_para_matriz[i] == ' ')
+        if(texto_para_matriz[i] == ' ' || texto_para_matriz[i] == '\n')
         {
             for(int j = i; j < tamanho_da_entrada - 1; j++) texto_para_matriz[j] = texto_para_matriz[j+1];
         }
@@ -74,7 +74,7 @@ void coloca_tudo_em_minusculo(char texto_para_matriz[], int tamanho_da_entrada)
 
 void formatar_string_para_matriz(char texto_para_matriz[], int tamanho_da_entrada)
 {
-    retira_espacos(texto_para_matriz, tamanho_da_entrada);
+    retira_char_nulo(texto_para_matriz, tamanho_da_entrada);
     coloca_tudo_em_minusculo(texto_para_matriz, tamanho_da_entrada);
 }
 
@@ -93,7 +93,7 @@ void preenche_matriz(char** matriz, Dimensoes dimensoes_da_matriz)
         exit(0);
     }
     
-    printf("Por favor, insira todos os caracteres de uma vez.\n");
+    printf("Por favor, insira todos os caracteres de uma vez em uma única linha.\n");
     scanf("%s", &texto_para_matriz);
 
     formatar_string_para_matriz(texto_para_matriz, tamanho_da_entrada);
