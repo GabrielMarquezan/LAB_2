@@ -186,3 +186,85 @@ void desaloca_matriz(char** matriz, Dimensoes dimensoes_da_matriz)
     for(int i = 0; i < dimensoes_da_matriz.linhas; i++) free(matriz[i]);
     free(matriz);
 }
+
+int seleciona_sentido_da_busca(void)
+{
+    int opcao_de_busca = -1;
+
+    do
+    {
+        printf("Em que sentido você deseja realizar a busca?\n");
+        printf("1 - Horizontal direta\n");
+        printf("2 - Horizontal inversa\n");
+        printf("3 - Vertical direta\n");
+        printf("4 - Vertical inversa\n");
+        printf("5 - Diagonal direta\n");
+        printf("6 - Diagonal inversa\n");
+        printf("Insira o número de sua opção: ");
+        scanf("%d", &opcao_de_busca);
+    }
+    while(opcao_de_busca < 1 || opcao_de_busca > 6);
+
+    return opcao_de_busca;
+}
+
+void inverte_string(char string[], int tamanho_da_string)
+{
+    char auxiliar = ' ';
+    int indice_inverso = tamanho_da_string;
+    
+    for(int i = 0; i < tamanho_da_string / 2; i++)
+    {
+        auxiliar = string[i];
+        string[i] = string[indice_inverso];
+        string[indice_inverso] = string[i];
+        indice_inverso--;
+    }
+}
+
+void atualiza_posicao_da_palavra(char** matriz, char* endereco_base, int posicoes[2], Dimensoes dimensoes_da_matriz)
+{
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
+    {
+        for(int j = 0; j < dimensoes_da_matriz.colunas; j++)
+        {
+            if(endereco_base == &matriz[i][j])
+            {
+                posicoes[0] = i;
+                posicoes[1] = j;
+            }
+        }
+    }
+}
+
+char* busca_palavra_horizontal_direta(char** matriz, Dimensoes dimensoes_da_matriz, char palavra_buscada[])
+{
+    char* primeiro_endereço_palavra = NULL;
+
+    for(int i = 0; i < dimensoes_da_matriz.linhas; i++)
+    {
+        primeiro_endereço_palavra = strstr(matriz[i], palavra_buscada);
+
+        if(primeiro_endereço_palavra != NULL) return primeiro_endereço_palavra;
+    }
+
+    return primeiro_endereço_palavra;
+}
+
+void busca_palavra_horizontal(char** matriz, Dimensoes dimensoes_da_matriz, int posicoes[], char palavra_buscada[])
+{
+    char* endereco_primeiro_elemento = busca_palavra_horizontal_direta(matriz, dimensoes_da_matriz, palavra_buscada);
+    atualiza_posicao_da_palavra(matriz, endereco_primeiro_elemento, posicoes, dimensoes_da_matriz);
+}
+
+void busca_palavra(char** matriz, Dimensoes dimensoes_da_matriz, int posicoes[], char palavra_buscada[])
+{
+    int opcao_de_busca = seleciona_sentido_da_busca();
+
+    switch(opcao_de_busca)
+    {
+        case 1:
+            busca_palavra_horizontal(matriz, dimensoes_da_matriz, posicoes, palavra_buscada);
+            break;
+    }
+}
