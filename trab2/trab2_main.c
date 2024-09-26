@@ -4,23 +4,24 @@
 
 int main(void)
 {
-    Dimensoes dimensoes_da_matriz = {0, 0};
-    Dimensoes* ponteiro_para_dimensoes_da_matriz = &dimensoes_da_matriz;
-    char** matriz = NULL;
-    int posicao_palavra[2] = {-1, -1};
-    char buscada[] = "mig";
+    //Structs essenciais
+    Matriz matriz_caca_palavras = {NULL, -1, -1};
+    Palavra palavra_buscada = {"mig", {-1, -1}, {-1, -1}};
+    //Ponteiros
+    Matriz *ponteiro_para_caca_palavras = &matriz_caca_palavras;
+    Palavra *ponteiro_para_palavra_buscada = &palavra_buscada;
 
-        le_dimensoes_matriz(ponteiro_para_dimensoes_da_matriz);
-        matriz = aloca_matriz(dimensoes_da_matriz);
-        inicializa_matriz(matriz, dimensoes_da_matriz);
-        preenche_matriz(matriz, dimensoes_da_matriz);
-        imprime_matriz(matriz, dimensoes_da_matriz);
-        busca_palavra(matriz, dimensoes_da_matriz, posicao_palavra, buscada);
 
-        if(posicao_palavra[0] >= 0 && posicao_palavra[1] >= 0) 
-        {
-            printf("\n\n%d, %d\n\n", posicao_palavra[0] + 1, posicao_palavra[1] + 1);
-        }
+        le_dimensoes_matriz(ponteiro_para_caca_palavras);
+        matriz_caca_palavras.matriz = aloca_matriz(matriz_caca_palavras.numero_de_linhas, matriz_caca_palavras.numero_de_colunas);
+        inicializa_matriz(ponteiro_para_caca_palavras);
+        preenche_matriz(ponteiro_para_caca_palavras);
+        imprime_matriz(ponteiro_para_caca_palavras);
+        busca_palavra(ponteiro_para_caca_palavras, ponteiro_para_palavra_buscada);
 
-        desaloca_matriz(matriz, dimensoes_da_matriz);
+
+        printf("\n\nInício: %d, %d\n", palavra_buscada.inicio.y, palavra_buscada.inicio.x) ;
+        printf("Fim: %d, %d\n\n", palavra_buscada.fim.y, palavra_buscada.fim.x);
+
+        desaloca_matriz(ponteiro_para_caca_palavras);
 }
