@@ -10,6 +10,7 @@
 typedef struct
 {
     char** matriz;
+    char** transposta;
     int numero_de_linhas;
     int numero_de_colunas;
 } Matriz;
@@ -22,10 +23,9 @@ typedef struct
 
 typedef struct
 {
-    char* palavra;
     Ponto inicio;
     Ponto fim;
-} Palavra;
+} Coordenadas;
 
 void le_dimensoes_matriz(Matriz* matriz);
 
@@ -34,8 +34,6 @@ char** aloca_matriz(int linhas, int colunas);
 
 void inicializa_matriz(Matriz* matriz);
 //Preenche a matriz com espaços para garantir que não haja lixo
-
-char* aloca_vetor_para_guardar_string(int tamanho_do_texto_para_matriz);
 
 void le_texto_para_matriz(char texto_para_matriz[], int tamanho_do_texto_para_matriz);
 
@@ -47,7 +45,7 @@ void coloca_tudo_em_minusculo(char texto_para_matriz[], int tamanho_do_texto_par
 void formatar_string_para_matriz(char texto_para_matriz[], int tamanho_do_texto_para_matriz);
 //Chama 'coloca_tudo_em_minusculo' e 'insere_barra_zeros'
 
-char* texto_pronto_para_matriz(int linhas, int colunas);
+void texto_pronto_para_matriz(char texto_para_matriz[], int tamanho_do_texto_para_matriz);
 //Retorna a string tratada e pronta para o uso na matriz
 
 void insere_barra_zeros(Matriz* matriz);
@@ -56,23 +54,22 @@ void insere_barra_zeros(Matriz* matriz);
 void preenche_matriz(Matriz* matriz);
 //Preenche com o texto informado pelo usuário
 
-void imprime_matriz(Matriz* matriz);
+void imprime_matriz(char** matriz, int linhas, int colunas);
 
-void desaloca_matriz(Matriz* matriz);
+void desaloca_matriz_e_transposta(Matriz* matriz);
+
+void le_palavra_buscada(char palavra_buscada[], Matriz matriz);
 
 int seleciona_sentido_da_busca(void);
 
-void inverte_string(char string[], int tamanho_da_string);
+void inverte_string(char string[], int tamanho);
 
-void atualiza_posicao_da_palavra(Matriz* matriz, char* endereco_base, Palavra* palavra_buscada, int tipo_de_busca);
+void calcula_fim_da_palavra(Coordenadas* posicoes, char palavra_buscada[], int tipo_de_busca);
 
-void preenche_vetor_posicoes_invertidas(int vetor[], int tamanho);
-//Preenche um vetor que contém a relação entre as posições das colunas da matriz original e da matriz invertida (espelhada)
+void atualiza_posicao_da_palavra(Matriz* matriz, char* endereco_base, Coordenadas* posicoes, char palavra_buscada[], int tipo_de_busca);
 
-char* busca_palavra_horizontal_direta(Matriz* matriz, Palavra* palavra_buscada);
+void transpoe_matriz(Matriz* matriz);
 
-char* busca_palavra_horizontal_inversa(Matriz* matriz, Palavra* palavra_buscada);
-
-void busca_palavra(Matriz* matriz, Palavra* palavra_buscada);
+void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[]);
 
 #endif
