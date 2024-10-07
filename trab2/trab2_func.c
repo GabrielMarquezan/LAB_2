@@ -46,8 +46,7 @@ void inicializa_matriz(Matriz* matriz)
 void le_texto_para_matriz(char texto_para_matriz[], int tamanho_do_texto_para_matriz)
 {
     printf("Por favor, insira todos os caracteres de uma vez.\n");
-    //Esse getchar() captura o ENTER digitado por último para que o fgets() funcione corretamente
-    getchar();
+    getchar(); //Captura o ENTER digitado por último para que o fgets() funcione corretamente
     fgets(texto_para_matriz, tamanho_do_texto_para_matriz, stdin);
 }
 
@@ -89,7 +88,6 @@ void texto_pronto_para_matriz(char texto_para_matriz[], int tamanho_do_texto_par
 
 void insere_barra_zeros(Matriz* matriz)
 {
-    //Garante que haverá '\0' no fim das linhas
     for(int i = 0; i < matriz->numero_de_linhas; i++) matriz->matriz[i][matriz->numero_de_colunas] = '\0';
 }
 
@@ -99,9 +97,9 @@ void preenche_matriz(Matriz* matriz)
     nada seja truncado pela existência de espaços na entrada do usuário*/
     int tamanho_do_texto_para_matriz = matriz->numero_de_linhas * matriz->numero_de_colunas * 1.5;
     char texto_para_matriz[tamanho_do_texto_para_matriz];
+    int contador = 0;
 
     texto_pronto_para_matriz(texto_para_matriz, tamanho_do_texto_para_matriz);
-    int contador = 0;
 
     //Preenche a matriz com a entrada de dados devidamente tratada
     for(int i = 0; i < matriz->numero_de_linhas; i++)
@@ -127,10 +125,7 @@ void imprime_matriz(char** matriz, int linhas, int colunas)
     //Imprime o índice das colunas
     for(int i = 0; i < colunas; i++)
     {
-        if(i < 9) 
-        {
-            printf("| 0%d ", i + 1);
-        }
+        if(i < 9) printf("| 0%d ", i + 1);
         else printf("| %d ", i + 1);
     }
 
@@ -138,18 +133,14 @@ void imprime_matriz(char** matriz, int linhas, int colunas)
 
     for(int i = 0; i < linhas; i++)
     {
-        //Divide as linhas
-        for(int i = 0; i < 5 * colunas + 5; i++) printf("-");
+        for(int i = 0; i < 5 * colunas + 5; i++) printf("-"); //Divide as linhas
         
         //Imprime o índice das linhas
-        if(i < 9)
-        {
-           printf("\n 0%d ", i + 1); 
-        } 
+        if(i < 9) printf("\n 0%d ", i + 1); 
         else printf("\n %d ", i + 1);
 
-        //Imprime o conteúdo da matriz
-        for(int j = 0; j < colunas; j++)
+        //Imprime o conteúdo da matriz, garantindo que sejam letras e não lixo eletrônico
+        for(int j = 0; j < colunas; j++) 
         {
             if(matriz[i][j] >= 97 || matriz[i][j] <= 122) printf("|  %c ", matriz[i][j]);
         }
@@ -171,9 +162,9 @@ void desaloca_matriz_e_transposta(Matriz* matriz)
 
 void le_palavra_buscada(char palavra_buscada[], Matriz matriz)
 {
-    printf("\nInsira a palavra a ser procurada: ");
+    printf("\nInsira a palavra a ser procurada: "); 
     fgets(palavra_buscada, matriz.numero_de_colunas, stdin);
-    palavra_buscada[strlen(palavra_buscada) - 1] = '\0';
+    palavra_buscada[strlen(palavra_buscada) - 1] = '\0'; //Substitui o '\n' que fica no final por '\0'
 }
 
 int seleciona_sentido_da_busca(void)
@@ -215,7 +206,7 @@ void inverte_string(char string[], int tamanho)
 
 void calcula_fim_da_palavra(Coordenadas* posicoes, char palavra_buscada[], int tipo_de_busca)
 {
-    switch(tipo_de_busca)
+    switch(tipo_de_busca) //Altera a posição final com base no tipo de busca
     {
         case 1:
             posicoes->fim.x = posicoes->inicio.x + strlen(palavra_buscada) - 1;
@@ -252,7 +243,7 @@ void atualiza_posicao_da_palavra(Matriz* matriz, char* endereco_base, Coordenada
                 if(endereco_base == &matriz->transposta[i][j])
                 {
                     posicoes->inicio.x = i + 1;
-                    posicoes->inicio.y = j + +1;
+                    posicoes->inicio.y = j + 1;
                     calcula_fim_da_palavra(posicoes, palavra_buscada, tipo_de_busca);
                 }
             }
@@ -275,7 +266,7 @@ void atualiza_posicao_da_palavra(Matriz* matriz, char* endereco_base, Coordenada
     }
 }
 
-void transpoe_matriz(Matriz* matriz)
+void transpoe_matriz(Matriz* matriz) //Cria a transposta da matriz
 {
     for(int i = 0; i < matriz->numero_de_linhas; i++)
     {
@@ -283,47 +274,138 @@ void transpoe_matriz(Matriz* matriz)
     }
 }
 
+void busca_diagonal_principal(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[], bool inversa)
+{
+    int tamanho_da_palavra = strlen(palavra_buscada);
+    bool achou_palavra = false;
+    int inicio_linha = -1, inicio_coluna = -1;
+    int fim_linha = -1, fim_coluna = -1;
+
+    for(int i = 0; i <= matriz->numero_de_linhas - tamanho_da_palavra; i++)
+    {
+        for(int j = 0; j <= matriz->numero_de_colunas - tamanho_da_palavra; j++)
+        {
+            for(int k = 0; k < tamanho_da_palavra; k++) //k é a variável que vai fazer o caminho da diagonal
+            {
+                if(matriz->matriz[i+k][j+k] == palavra_buscada[k])
+                {
+                    achou_palavra = true;
+                    inicio_linha = i;
+                    inicio_coluna = j;
+                    fim_linha = i+k;
+                    fim_coluna = j+k;
+                }
+                else
+                {
+                    achou_palavra = false;
+                    break;
+                }
+            }
+            
+            if(achou_palavra) break;
+        }
+
+        if(achou_palavra) break;
+    }
+
+    if(achou_palavra && inversa) //Sempre adicionando +1 para que faça sentido no print final
+    {
+        posicoes->inicio.y = fim_linha + 1, posicoes->inicio.x = fim_coluna + 1;
+        posicoes->fim.y = inicio_linha + 1, posicoes->fim.x = inicio_coluna + 1;
+    }
+    else if(achou_palavra) //Só inverte inicio e fim
+    {
+        posicoes->inicio.y = inicio_linha + 1, posicoes->inicio.x = inicio_coluna + 1;
+        posicoes->fim.y = fim_linha + 1, posicoes->fim.x = fim_coluna + 1;
+    }
+}
+
+void busca_diagonal_secundaria(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[], bool inversa)
+{
+    int tamanho_da_palavra = strlen(palavra_buscada);
+    bool achou_palavra = false;
+    int inicio_linha = -1, inicio_coluna = -1;
+    int fim_linha = -1, fim_coluna = -1;
+
+    for(int i = 0; i <= matriz->numero_de_linhas - tamanho_da_palavra; i++) //Indo para baixo e para a esquerda
+    {
+        for(int j = matriz->numero_de_colunas - 1; j >= tamanho_da_palavra; j--)
+        {
+            for(int k = 0; k < tamanho_da_palavra; k++) //k é a variável que vai fazer o caminho da diagonal
+            {
+                if(matriz->matriz[i+k][j-k] == palavra_buscada[k])
+                {
+                    achou_palavra = true;
+                    inicio_linha = i;
+                    inicio_coluna = j;
+                    fim_linha = i+k;
+                    fim_coluna = j-k;
+                }
+                else
+                {
+                    achou_palavra = false;
+                    break;
+                }
+            }
+
+            if(achou_palavra) break;  
+        }
+
+        if(achou_palavra) break;
+    }
+
+    if(achou_palavra && inversa) //Sempre adicionando +1 para que faça sentido no print final
+    {
+        posicoes->inicio.y = fim_linha + 1, posicoes->inicio.x = fim_coluna + 1;
+        posicoes->fim.y = inicio_linha + 1, posicoes->fim.x = inicio_coluna + 1;
+    }
+    else if(achou_palavra) //Só inverte inicio e fim
+    {
+        posicoes->inicio.y = inicio_linha + 1, posicoes->inicio.x = inicio_coluna + 1;
+        posicoes->fim.y = fim_linha + 1, posicoes->fim.x = fim_coluna + 1;
+    }
+}
+
 void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[])
 {
     int opcao_de_busca = seleciona_sentido_da_busca();
     char* primeiro_endereco_palavra = NULL;
-    bool pesquisar_na_transposta = false;
+    //Flags de pesquisa
+    bool pesquisar_na_transposta = false, pesquisa_inversa = false;
+    bool pesquisa_diagonal_principal = false, pesquisa_diagonal_secundaria = false;
 
-    switch(opcao_de_busca)
+    if(opcao_de_busca % 2 == 0)
     {
-        case 1:
-            break;
-        case 2:
-            inverte_string(palavra_buscada, strlen(palavra_buscada));
-            break;
-        case 3:
-            pesquisar_na_transposta = true;
-            break;
-        case 4:
-            pesquisar_na_transposta = true;
-            inverte_string(palavra_buscada, strlen(palavra_buscada));
-            break;
+        inverte_string(palavra_buscada, strlen(palavra_buscada));
+        pesquisa_inversa = true;
     }
 
-    if(pesquisar_na_transposta)
-    {
-        for(int i = 0; i < matriz->numero_de_colunas; i++)
-        {
-            primeiro_endereco_palavra = strstr(matriz->transposta[i], palavra_buscada);
-            if(primeiro_endereco_palavra != NULL) break;
-        }
-    }
+    if(opcao_de_busca == 3 || opcao_de_busca == 4) pesquisar_na_transposta = true;
+    else if(opcao_de_busca == 5 || opcao_de_busca == 6) pesquisa_diagonal_principal = true;
+    else if(opcao_de_busca == 7 || opcao_de_busca == 8) pesquisa_diagonal_secundaria = true;
+
+    //Pesquisas diagonais são separadas pois não podem ser feitas usando transformações da matriz
+    if(pesquisa_diagonal_principal) busca_diagonal_principal(matriz, posicoes, palavra_buscada, pesquisa_inversa);
+    else if(pesquisa_diagonal_secundaria) busca_diagonal_secundaria(matriz, posicoes, palavra_buscada, pesquisa_inversa);
     else
     {
-        for(int i = 0; i < matriz->numero_de_linhas; i++)
+        if(pesquisar_na_transposta)
         {
-            primeiro_endereco_palavra = strstr(matriz->matriz[i], palavra_buscada);
-            if(primeiro_endereco_palavra != NULL) break;
+            for(int i = 0; i < matriz->numero_de_colunas; i++)
+            {
+                primeiro_endereco_palavra = strstr(matriz->transposta[i], palavra_buscada);
+                if(primeiro_endereco_palavra != NULL) break;
+            }
         }
-    }
-    
-    if(primeiro_endereco_palavra != NULL) 
-    {
-        atualiza_posicao_da_palavra(matriz, primeiro_endereco_palavra, posicoes, palavra_buscada, opcao_de_busca);
+        else
+        {
+            for(int i = 0; i < matriz->numero_de_linhas; i++)
+            {
+                primeiro_endereco_palavra = strstr(matriz->matriz[i], palavra_buscada);
+                if(primeiro_endereco_palavra != NULL) break;
+            }
+        }
+        
+        if(primeiro_endereco_palavra != NULL) atualiza_posicao_da_palavra(matriz, primeiro_endereco_palavra, posicoes, palavra_buscada, opcao_de_busca);
     }
 }
