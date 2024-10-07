@@ -65,11 +65,20 @@ int seleciona_sentido_da_busca(void);
 void inverte_string(char string[], int tamanho);
 
 void calcula_fim_da_palavra(Coordenadas* posicoes, char palavra_buscada[], int tipo_de_busca);
+//Calcula a posição do útlimo caracter da palavra de acordo com o seu tamanho e o tipo de busca feito
 
 void atualiza_posicao_da_palavra(Matriz* matriz, char* endereco_base, Coordenadas* posicoes, char palavra_buscada[], int tipo_de_busca);
+//Altera pontos de inicio e fim da estrutura "posicoes_palavra_buscada"
 
 void transpoe_matriz(Matriz* matriz);
+//Transformação necessária para facilitar pesquisa na vertical
+
+void busca_diagonal_principal(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[], bool inversa);
+void busca_diagonal_secundaria(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[], bool inversa);
+//Funções de busca diagonal são necessárias devido à natureza da busca (não há transformação da matriz que possibilite uma busca igual às demais)
+//Essas funções alteram diretamente a posição da palavra buscada
 
 void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[]);
+//Agrupa todos os tipos de busca
 
 #endif
