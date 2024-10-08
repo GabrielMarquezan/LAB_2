@@ -5,23 +5,36 @@
 int main(void)
 {
     //Structs essenciais
-    Matriz matriz_caca_palavras = {NULL, -1, -1};
-    Palavra palavra_buscada = {"mig", {-1, -1}, {-1, -1}};
+    Matriz matriz_caca_palavras = {NULL, NULL, -1, -1};
+    Coordenadas posicoes_palavra_buscada = {{-1, -1}, {-1, -1}};
     //Ponteiros
     Matriz *ponteiro_para_caca_palavras = &matriz_caca_palavras;
-    Palavra *ponteiro_para_palavra_buscada = &palavra_buscada;
+    Coordenadas *ponteiro_para_posicoes_palavra_buscada = &posicoes_palavra_buscada;
+    //Resto
+    int tamanho_palavra_buscada = 0;
 
+    deixa_matriz_pronta(ponteiro_para_caca_palavras);
 
-        le_dimensoes_matriz(ponteiro_para_caca_palavras);
-        matriz_caca_palavras.matriz = aloca_matriz(matriz_caca_palavras.numero_de_linhas, matriz_caca_palavras.numero_de_colunas);
-        inicializa_matriz(ponteiro_para_caca_palavras);
-        preenche_matriz(ponteiro_para_caca_palavras);
-        imprime_matriz(ponteiro_para_caca_palavras);
-        busca_palavra(ponteiro_para_caca_palavras, ponteiro_para_palavra_buscada);
+    if(matriz_caca_palavras.numero_de_colunas > matriz_caca_palavras.numero_de_linhas)
+    {
+        tamanho_palavra_buscada = matriz_caca_palavras.numero_de_colunas + 1;
+    }
+    else tamanho_palavra_buscada = matriz_caca_palavras.numero_de_linhas + 1;
 
+    char palavra_buscada[tamanho_palavra_buscada];
 
-        printf("\n\nInício: %d, %d\n", palavra_buscada.inicio.y, palavra_buscada.inicio.x) ;
-        printf("Fim: %d, %d\n\n", palavra_buscada.fim.y, palavra_buscada.fim.x);
+    while(true)
+    {
+        imprime_matriz(matriz_caca_palavras.matriz, matriz_caca_palavras.numero_de_linhas, matriz_caca_palavras.numero_de_colunas);
+        inicializa_vetor_de_char(palavra_buscada, tamanho_palavra_buscada);
+        le_palavra_buscada(palavra_buscada, matriz_caca_palavras);
+        busca_palavra(ponteiro_para_caca_palavras, ponteiro_para_posicoes_palavra_buscada, palavra_buscada);
+        imprime_posicoes_palavra(posicoes_palavra_buscada);
 
-        desaloca_matriz(ponteiro_para_caca_palavras);
+        if(!deseja_continuar_jogando()) break;
+    }
+
+    printf("\n\nFIM DE JOGO\n\n");
+
+    desaloca_matriz_e_transposta(ponteiro_para_caca_palavras);
 }
