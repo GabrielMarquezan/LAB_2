@@ -118,6 +118,16 @@ void preenche_matriz(Matriz* matriz)
     insere_barra_zeros(matriz);
 }
 
+void deixa_matriz_pronta(Matriz* matriz)
+{
+    le_dimensoes_matriz(matriz);
+    matriz->matriz = aloca_matriz(matriz->numero_de_linhas, matriz->numero_de_colunas);
+    matriz->transposta = aloca_matriz(matriz->numero_de_colunas, matriz->numero_de_linhas);
+    inicializa_matriz(matriz);
+    preenche_matriz(matriz);
+    transpoe_matriz(matriz);
+}
+
 void imprime_matriz(char** matriz, int linhas, int colunas)
 {
     printf("\n    ");
@@ -160,10 +170,16 @@ void desaloca_matriz_e_transposta(Matriz* matriz)
     free(matriz->transposta);
 }
 
+void inicializa_vetor_de_char(char vetor[], int tamanho)
+{
+    for(int i = 0; i < tamanho - 1; i++) vetor[i] = ' ';
+    vetor[tamanho - 1] = '\0';
+}
+
 void le_palavra_buscada(char palavra_buscada[], Matriz matriz)
 {
     printf("\nInsira a palavra a ser procurada: "); 
-    fgets(palavra_buscada, matriz.numero_de_colunas, stdin);
+    scanf("%s", palavra_buscada);
     palavra_buscada[strlen(palavra_buscada) - 1] = '\0'; //Substitui o '\n' que fica no final por '\0'
 }
 
@@ -407,5 +423,32 @@ void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[]
         }
         
         if(primeiro_endereco_palavra != NULL) atualiza_posicao_da_palavra(matriz, primeiro_endereco_palavra, posicoes, palavra_buscada, opcao_de_busca);
+    }
+}
+
+void imprime_posicoes_palavra(Coordenadas posicoes)
+{
+    printf("\nLinha do início: %d\n", posicoes.inicio.y);
+    printf("Coluna do início: %d\n", posicoes.inicio.x);
+    printf("Linha do fim: %d\n", posicoes.fim.y);
+    printf("Coluna do fim: %d\n", posicoes.fim.x);
+}
+
+bool deseja_continuar_jogando(void)
+{
+    char escolha = ' ';
+
+    getchar(); //Pega o \n
+
+    while(true)
+    {
+        printf("\nVocê deseja continuar jogando?\n");
+        printf("Sim: digite [Y]\n");
+        printf("Não: digite [N]\n");
+        printf("Insira sua resposta: ");  
+        scanf("%c", &escolha);
+
+        if(escolha == 'N' || escolha == 'n') return false;
+        else if(escolha == 'Y' || escolha == 'y') return true;
     }
 }
