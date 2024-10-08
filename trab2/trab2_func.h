@@ -54,9 +54,13 @@ void insere_barra_zeros(Matriz* matriz);
 void preenche_matriz(Matriz* matriz);
 //Preenche com o texto informado pelo usuário
 
+void deixa_matriz_pronta(Matriz* matriz);
+
 void imprime_matriz(char** matriz, int linhas, int colunas);
 
 void desaloca_matriz_e_transposta(Matriz* matriz);
+
+void inicializa_vetor_de_char(char vetor[], int tamanho);
 
 void le_palavra_buscada(char palavra_buscada[], Matriz matriz);
 
@@ -80,5 +84,9 @@ void busca_diagonal_secundaria(Matriz* matriz, Coordenadas* posicoes, char palav
 
 void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[]);
 //Agrupa todos os tipos de busca
+
+void imprime_posicoes_palavra(Coordenadas posicoes);
+
+bool deseja_continuar_jogando(void);
 
 #endif
