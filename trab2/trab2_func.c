@@ -428,10 +428,14 @@ void busca_palavra(Matriz* matriz, Coordenadas* posicoes, char palavra_buscada[]
 
 void imprime_posicoes_palavra(Coordenadas posicoes)
 {
-    printf("\nLinha do início: %d\n", posicoes.inicio.y);
-    printf("Coluna do início: %d\n", posicoes.inicio.x);
-    printf("Linha do fim: %d\n", posicoes.fim.y);
-    printf("Coluna do fim: %d\n", posicoes.fim.x);
+    if(posicoes.inicio.x == -1) printf("\nPalavra não encontrada!\n\n");
+    else
+    {
+        printf("\nLinha do início: %d\n", posicoes.inicio.y);
+        printf("Coluna do início: %d\n", posicoes.inicio.x);
+        printf("Linha do fim: %d\n", posicoes.fim.y);
+        printf("Coluna do fim: %d\n", posicoes.fim.x);
+    }
 }
 
 bool deseja_continuar_jogando(void)
