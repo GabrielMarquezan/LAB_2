@@ -21,11 +21,12 @@ alunos* cria_e_preenche_um_aluno()
     printf("%s\n", novo->nome);
 
     printf("Digite a matricula do aluno: ");
-    scanf(" %d", &novo->matricula);
+    scanf("%d", &novo->matricula);
     printf("%d\n", novo->matricula);
 
     printf("Digite o número de telefone do aluno: ");
     novo->telefone = inicializa_nomes();
+    getchar();
     fgets(novo->telefone, sizeof(char)*110, stdin);
     novo->telefone[strcspn(novo->telefone, "\n")] = 0;
     printf("%s\n", novo->telefone);
@@ -38,11 +39,14 @@ professores* cria_e_preenche_um_professor(){
     novo->nome = inicializa_nomes();
 
     printf("Digite o nome do professor: ");
+    getchar();
     fgets(novo->nome, sizeof(char)*110, stdin);
     novo->nome[strcspn(novo->nome, "\n")] = 0;
+    printf("%s\n", novo->nome);
 
     printf("Digite o código do professor: ");
     scanf("%d", &novo->codigo);
+    printf("%d\n", novo->codigo);
 
     novo->departamento = inicializa_nomes();
     printf("Digite o departamento de lotação do professor: ");
@@ -61,7 +65,8 @@ projetos* cria_e_preenche_um_projeto(lista* lista_de_professores)
     int codigo_do_professor = -1;
 
     printf("Digite o código do projeto: ");
-    scanf(" %d", &novo->codigo);
+    scanf("%d", &novo->codigo);
+    printf("%d\n", novo->codigo);
 
     novo->descricao = (char*) malloc(sizeof(char)*400);
 
@@ -77,9 +82,11 @@ projetos* cria_e_preenche_um_projeto(lista* lista_de_professores)
         scanf("%d", &tipo_do_projeto);
     } 
     novo->tipo = tipo_do_projeto;
+    printf("%d\n", novo->tipo);
 
     printf("Digite o orçamento aprovado para o projeto: ");
-    scanf(" %f", &novo->orcamento_aprovado);
+    scanf("%f", &novo->orcamento_aprovado);
+    printf("%.2f\n", novo->orcamento_aprovado);
 
     novo->orcamento_disponivel = novo->orcamento_aprovado;
 
@@ -305,10 +312,10 @@ void imprime_relatorio_projeto(projetos* projeto, vinculos* vinculo)
     else if(projeto->tipo == 3) printf("Extensão\n");
 
     printf("\tProfessor coordenador: %s\n", projeto->prof_coordenador->nome);
-    printf("Orçamento disponível: %lf\n", projeto->orcamento_disponivel);
+    printf("\tOrçamento disponível: %lf\n", projeto->orcamento_disponivel);
     
-    if(vinculo != NULL) printf("Aluno vinculado: %s", vinculo->aluno->nome);
-    else printf("Não há alunos vinculados a este projeto.\n");
+    if(vinculo != NULL) printf("\tAluno vinculado: %s", vinculo->aluno->nome);
+    else printf("\tNão há alunos vinculados a este projeto.\n");
 }
 
 void desaloca_lista_de_alunos(lista* lista_alunos)
