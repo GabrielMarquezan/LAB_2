@@ -55,6 +55,7 @@ void* insere_no_fim_da_lista(void* ponteiro_dos_dados, lista* minha_lista);
 void* insere_no_inicio_da_lista(void* ponteiro_dos_dados, lista* minha_lista);
 lista* exclui_vinculo(lista* lista_vinculos, lista* lista_alunos, lista* lista_projetos);
 vinculos* cria_e_preenche_um_vinculo(lista* lista_alunos, lista* lista_projetos, lista* lista_vinculos);
+void imprime_lista(lista* minha_lista, int tipo_da_lista);
 void imprime_relatorio_projeto(projetos* projeto, vinculos* vinculo);
 void desaloca_lista_de_alunos(lista* lista_alunos);
 void desaloca_lista_professores(lista* lista_professores);
