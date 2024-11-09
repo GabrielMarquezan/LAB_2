@@ -7,7 +7,7 @@ Mesa** aloca_matriz_de_mesas(int n_linhas, int n_colunas)
     Mesa** matriz = (Mesa**) malloc(n_linhas * sizeof(Mesa*));
     if(matriz == NULL)
     {
-        printf("Erro ao alocar matriz de mesas.\n");
+        printf("Erro ao alocar matriz de mesas.\n\n");
         return NULL;
     }
 
@@ -16,7 +16,7 @@ Mesa** aloca_matriz_de_mesas(int n_linhas, int n_colunas)
         matriz[i] = (Mesa*) malloc(n_colunas * sizeof(Mesa));
         if(matriz[i] == NULL)
         {
-            printf("Erro ao alocar linha %d matriz de mesas.\n", i);
+            printf("Erro ao alocar linha %d matriz de mesas.\n\n", i);
             desaloca_matriz_de_mesas(matriz, i);
             return NULL;
         }
@@ -28,7 +28,7 @@ void desaloca_matriz_de_mesas(Mesa** matriz, int n_linhas)
 {
     if(matriz == NULL) 
     {
-        printf("Matriz de mesas está vazia. Impossível desalocar!\n");
+        printf("Matriz de mesas está vazia. Impossível desalocar!\n\n");
         return;
     }
 
@@ -36,7 +36,7 @@ void desaloca_matriz_de_mesas(Mesa** matriz, int n_linhas)
     {
         if(matriz[i] == NULL)
         {
-            printf("Linha %d da matriz de mesas está vazia. Impossível desalocar!\n", i);
+            printf("Linha %d da matriz de mesas está vazia. Impossível desalocar!\n\n", i);
             return;
         }
         free(matriz[i]);
@@ -58,14 +58,14 @@ void inicializa_pilha_de_pratos(Pilha_de_Pratos** pilha, int numero_de_pratos)
         novo_no = (Pilha_de_Pratos*) malloc(sizeof(Pilha_de_Pratos));
         if(novo_no == NULL)
         {
-            printf("Erro ao alocar novo espaço na pilha (inicialização).\n");
+            printf("Erro ao alocar novo espaço na pilha (inicialização).\n\n");
             return;
         }
 
         novo_no->prato = (Prato*) malloc(sizeof(Prato));
         if(novo_no->prato == NULL)
         {
-            printf("Erro ao alocar prato %d.\n", i);
+            printf("Erro ao alocar prato %d.\n\n", i);
             return;
         }
 
@@ -92,7 +92,7 @@ void empilha_prato(Pilha_de_Pratos** pilha, Prato* prato)
     Pilha_de_Pratos* novo_no = (Pilha_de_Pratos*) malloc(sizeof(Pilha_de_Pratos));
     if(novo_no == NULL)
     {
-        printf("Erro ao alocar novo espaço na pilha.\n");
+        printf("Erro ao alocar novo espaço na pilha.\n\n");
         return;
     }
     novo_no->prato = prato;
@@ -104,7 +104,7 @@ Prato* desempilha_prato(Pilha_de_Pratos** pilha)
 { 
     if(*pilha == NULL)
     {
-        printf("Pilha de pratos vazia. Impossível desempilhar.\n");
+        printf("Pilha de pratos vazia. Impossível desempilhar.\n\n");
         return NULL;
     }
     //Retorna o prato desempilhado
@@ -119,14 +119,14 @@ void inicializa_mesas(Mesa** mesas, Pilha_de_Pratos** pilha, int n_linhas, int n
 {
     if(mesas == NULL)
     {
-        printf("Matriz de mesas está vazia. Impossível inicializar mesas.\n");
+        printf("Matriz de mesas está vazia. Impossível inicializar mesas.\n\n");
         return;
     }
 
     //Necessita que a pilha de pratos esteja inicializada
     if(*pilha == NULL)
     {
-        printf("Pilha de pratos não inicializada. Impossível inicializar mesas.\n");
+        printf("Pilha de pratos não inicializada. Impossível inicializar mesas.\n\n");
         return;
     }
 
@@ -136,7 +136,7 @@ void inicializa_mesas(Mesa** mesas, Pilha_de_Pratos** pilha, int n_linhas, int n
     {
         if(mesas[i] == NULL)
         {
-            printf("Linha %d da matriz de mesas está vazia. Impossível inicializar mesas.\n", i);
+            printf("Linha %d da matriz de mesas está vazia. Impossível inicializar mesas.\n\n", i);
             return;
         }
 
@@ -163,11 +163,7 @@ Fila_de_Espera* cria_fila_de_espera()
 
 void desaloca_fila_de_espera(Fila_de_Espera** fila)
 {
-    if(*fila == NULL)
-    {
-        printf("Fila de espera está vazia. Impossível desalocar.\n");
-        return;
-    }
+    if(*fila == NULL) return;
 
     Fila_de_Espera* auxiliar;
     while(*fila != NULL)
@@ -183,7 +179,7 @@ void adiciona_grupo_na_fila(Fila_de_Espera** fila)
     Fila_de_Espera* novo_grupo = (Fila_de_Espera*) malloc(sizeof(Fila_de_Espera));
     if(novo_grupo == NULL)
     {
-        printf("Erro ao alocar novo espaço na fila de espera.\n");
+        printf("Erro ao alocar novo espaço na fila de espera.\n\n");
         return;
     }
 
@@ -193,9 +189,10 @@ void adiciona_grupo_na_fila(Fila_de_Espera** fila)
     while(tamanho_do_grupo < 1)
     {
         printf("Qual é o tamanho do grupo que chegou (-1 para cancelar)?\n");
+        printf("Tamanho do grupo: ");
         scanf("%d", &tamanho_do_grupo);
         if(tamanho_do_grupo == -1) return;
-        else if(tamanho_do_grupo < 1) printf("Tamanho inválido. Tente novamente.\n");
+        else if(tamanho_do_grupo < 1) printf("Tamanho inválido. Tente novamente.\n\n");
     }
 
     if(grupo_atual == NULL) novo_grupo->posicao = 1;
@@ -205,14 +202,14 @@ void adiciona_grupo_na_fila(Fila_de_Espera** fila)
     novo_grupo->proximo_grupo = grupo_atual;
     *fila = novo_grupo;
 
-    printf("Grupo de %d pessoas adicionado à fila de espera.\n", tamanho_do_grupo);
+    printf("Grupo de %d pessoas adicionado à fila de espera.\n\n", tamanho_do_grupo);
 }
 
-int remove_grupo_da_fila(Fila_de_Espera** fila)
+int remove_grupo_da_fila(Fila_de_Espera** fila, bool desistir)
 {
     if(*fila == NULL)
     {
-        printf("Fila de espera está vazia. Impossível remover grupo.\n");
+        printf("\nFila de espera está vazia. Impossível remover grupo.\n\n");
         return -1;
     }
 
@@ -223,7 +220,7 @@ int remove_grupo_da_fila(Fila_de_Espera** fila)
     {
         if(grupo->proximo_grupo == NULL)
         {   
-            if(grupo->tamanho_do_grupo <= MAX_LUGARES_POR_MESA)
+            if(grupo->tamanho_do_grupo <= MAX_LUGARES_POR_MESA || desistir)
             {
                 if(grupo_anterior != NULL) 
                 {
@@ -231,6 +228,9 @@ int remove_grupo_da_fila(Fila_de_Espera** fila)
                     for(Fila_de_Espera* aux = *fila; aux != NULL; aux = aux->proximo_grupo) aux->posicao--;
                 }
                 else *fila = NULL;
+
+                if(desistir) printf("Grupo de %d pessoas desistiu da fila.\n\n", grupo->tamanho_do_grupo);
+                else printf("Grupo de %d pessoas foi chamado para a mesa.\n\n", grupo->tamanho_do_grupo);
 
                 int numero_de_pessoas = grupo->tamanho_do_grupo;
                 free(grupo);
@@ -246,29 +246,29 @@ int remove_grupo_da_fila(Fila_de_Espera** fila)
     }
 }
 
-void inicializar_restaurante(Mesa*** mesas, Pilha_de_Pratos** pilha, bool* restaurante_aberto)
+void inicializar_restaurante(Mesa*** mesas, Pilha_de_Pratos** pilha, int* linhas, int* colunas, bool* restaurante_aberto)
 {
+    printf("\n");
+
     if(*restaurante_aberto)
     {
-        printf("Restaurante já está aberto.\n");
+        printf("Restaurante já está aberto.\n\n");
         return;
     }
 
-    int linhas_de_mesas = -1, colunas_de_mesas = -1;
-
-    while(linhas_de_mesas < 1 || colunas_de_mesas < 1)
+    while(*linhas < 1 || *colunas < 1)
     {
         printf("Informe número de linhas de mesas : ");
-        scanf("%d", &linhas_de_mesas);
+        scanf("%d", linhas);
         printf("Informe número de colunas de mesas : ");
-        scanf("%d", &colunas_de_mesas);
+        scanf("%d", colunas);
     }
 
-    *mesas = aloca_matriz_de_mesas(linhas_de_mesas, colunas_de_mesas);
-    inicializa_pilha_de_pratos(pilha, linhas_de_mesas * colunas_de_mesas * MAX_LUGARES_POR_MESA);
-    inicializa_mesas(*mesas, pilha, linhas_de_mesas, colunas_de_mesas);
+    *mesas = aloca_matriz_de_mesas(*linhas, *colunas);
+    inicializa_pilha_de_pratos(pilha, *linhas * *colunas * MAX_LUGARES_POR_MESA);
+    inicializa_mesas(*mesas, pilha, *linhas, *colunas);
 
-    printf("Restaurante aberto com sucesso!\n");
+    printf("Restaurante aberto com sucesso!\n\n");
     *restaurante_aberto = true;
 }
 
@@ -287,24 +287,32 @@ Mesa* busca_mesa(Mesa** mesas, int linhas, int colunas, int id_mesa)
     return NULL;
 }
 
+Mesa* acha_mesa_livre(Mesa** mesas, int linhas, int colunas)
+{
+    for(int i = 0; i < linhas; i++)
+    {
+        for(int j = 0; j < colunas; j++) if(!mesas[i][j].ocupada) return &mesas[i][j];
+    }
+    return NULL;
+}
+
 void arruma_mesa(Mesa* mesa, Pilha_de_Pratos** pilha)
 {
-    if(mesa->ocupada) printf("Mesa %d está ocupada. Não é possível arrumá-la.\n", mesa->id);
+    if(mesa->ocupada) printf("Mesa %d está ocupada. Não é possível arrumá-la.\n\n", mesa->id);
     else
     {
-        Pilha_de_Pratos* auxiliar = cria_pilha_vazia();
-                   
-        for(int k = 0; k < mesa->lugares_ocupados; k++)
+        Prato* pratos[MAX_LUGARES_POR_MESA];
+
+        //Tira os pratos usados da mesa
+        for(int k = 0; k < mesa->lugares_ocupados; k++) empilha_prato(pilha, mesa->pratos_utilizados[k]);
+        //Coloca pratos novos na mesa
+        for(int i = 0; i < MAX_LUGARES_POR_MESA; i++) 
         {
-            //Coloca pratos novos na pilha auxiliar e os pratos da mesa na pilha principal
-            //Depois, coloca os pratos da pilha auxiliar na mesa e libera a pilha auxiliar   
-            Prato* prato = desempilha_prato(pilha);
-            empilha_prato(&auxiliar, prato);
-            empilha_prato(pilha, mesa->pratos_utilizados[k]);
-            mesa->pratos_utilizados[k] = desempilha_prato(&auxiliar);
+            pratos[i] = desempilha_prato(pilha);
+            mesa->pratos_utilizados[i] = pratos[i];
         }
-        desaloca_pilha_de_pratos(&auxiliar);
-        printf("Mesa %d arrumada com sucesso!\n", mesa->id);
+        
+        printf("Mesa %d arrumada com sucesso!\n\n", mesa->id);
     }
 }
 
@@ -313,79 +321,88 @@ void libera_mesa(Fila_de_Espera** fila, Pilha_de_Pratos** pilha, Mesa** mesas, i
     Mesa* mesa = busca_mesa(mesas, linhas, colunas, id_mesa);
     if(mesa == NULL)
     {
-        printf("Mesa %d não encontrada.\n", id_mesa);
+        printf("Mesa %d não encontrada.\n\n", id_mesa);
         return;
     }
 
     if(mesa->ocupada)
     {
         mesa->ocupada = false;
-        mesa->lugares_ocupados = 0;
         arruma_mesa(mesa, pilha);
-        printf("Mesa %d liberada com sucesso!\n", id_mesa);
+        mesa->lugares_ocupados = 0;
+        printf("Mesa %d liberada com sucesso!\n\n", id_mesa);
     }
-    else printf("Mesa %d já está livre.\n", id_mesa);
+    else printf("Mesa %d já está livre.\n\n", id_mesa);
 }
 
-void ocupa_mesa(Fila_de_Espera** fila, Mesa** mesas, Pilha_de_Pratos** pilha, int id_mesa, int linhas, int colunas)
+Fila_de_Espera* retorna_primeiro_grupo_da_fila(Fila_de_Espera* fila)
 {
-    Mesa* mesa = busca_mesa(mesas, linhas, colunas, id_mesa);
-
-    if(mesa == NULL)
+    for(Fila_de_Espera* grupo = fila; grupo != NULL; grupo = grupo->proximo_grupo)
     {
-        printf("Mesa %d não encontrada.\n", id_mesa);
-        return;
+        if(grupo->proximo_grupo == NULL) return grupo;
     }
+}
 
-    if(mesa->ocupada) printf("Mesa %d já está ocupada.\n", id_mesa);
-    else
+void ocupa_mesa(Fila_de_Espera** fila, Mesa** mesas, Pilha_de_Pratos** pilha, int linhas, int colunas)
+{
+    Mesa* mesa = acha_mesa_livre(mesas, linhas, colunas);
+    Fila_de_Espera* primeiro_grupo = retorna_primeiro_grupo_da_fila(*fila);
+
+    while(primeiro_grupo != NULL && mesa != NULL) 
     {
-        if(*fila == NULL)
-        {
-            printf("Fila de espera está vazia. Não é possível ocupar mesa.\n");
-            return;
-        }
-
-        int numero_de_pessoas = remove_grupo_da_fila(fila);
+        int numero_de_pessoas = remove_grupo_da_fila(fila, false);
         if(numero_de_pessoas == -1) return;
 
         mesa->lugares_ocupados = numero_de_pessoas;
         mesa->ocupada = true;
-        if(mesa->lugares_ocupados < MAX_LUGARES_POR_MESA)
+        for(int i = mesa->lugares_ocupados; i < MAX_LUGARES_POR_MESA; i++)
         {
-            for(int i = mesa->lugares_ocupados - 1; i < MAX_LUGARES_POR_MESA; i++)
-            {
-                empilha_prato(pilha, mesa->pratos_utilizados[i]);
-                mesa->pratos_utilizados[i] = NULL;
-            }
+            empilha_prato(pilha, mesa->pratos_utilizados[i]);
+            mesa->pratos_utilizados[i] = NULL;
         }
 
-        printf("Mesa %d ocupada com sucesso!\n", id_mesa);
+        printf("Mesa %d ocupada com sucesso!\n\n", mesa->id);
+        primeiro_grupo = retorna_primeiro_grupo_da_fila(*fila);
+        mesa = acha_mesa_livre(mesas, linhas, colunas);
     }
+
+    if(primeiro_grupo == NULL) printf("Fila de espera está vazia.\n\n");
+    if(mesa == NULL) printf("Não há mesa livre para ocupar!\n\n");
 }
 
 void imprime_pilha_de_pratos(Pilha_de_Pratos* pilha)
 {
+    if(pilha == NULL)
+    {
+        printf("\nPilha vazia!\n\n");
+        return;
+    }
+
     for(Pilha_de_Pratos* atual = pilha; atual != NULL; atual = atual->proximo_prato)
     {
-        if(atual == pilha) printf("Topo da pilha: prato %d\n", atual->prato->id);
-        else if(atual->proximo_prato == NULL) printf("Térreo da pilha: prato %d\n", atual->prato->id);
-        else printf("Prato %d\n", atual->prato->id);
+        if(atual == pilha) printf("\nTopo da pilha: prato %d\n", atual->prato->id);
+        else if(atual->proximo_prato == NULL) printf("Térreo da pilha: prato %d\n\n", atual->prato->id);
+        else if(atual != NULL) printf("Prato %d\n", atual->prato->id);
     }
-    if(pilha == NULL) printf("Pilha vazia!\n");
 }
 
 void imprime_fila_de_espera(Fila_de_Espera* fila)
 {
-    for(Fila_de_Espera* atual = fila; atual != NULL; atual = atual->proximo_grupo)
-    {
-        printf("%d pessoas - %d° grupo da fila\n", atual->tamanho_do_grupo, atual->posicao);
-    }
+    printf("\n\n");
+    for(Fila_de_Espera* atual = fila; atual != NULL; atual = atual->proximo_grupo) printf("%d pessoas - %d° grupo da fila\n", atual->tamanho_do_grupo, atual->posicao);
     if(fila == NULL) printf("Fila de espera vazia!\n");
+    printf("\n");
 }
 
 void imprime_ocupacao_das_mesas(Mesa** mesas, int linhas, int colunas)
 {
+    printf("\n");
+    if(mesas == NULL)
+    {
+        printf("Matriz de mesas está vazia. Impossível imprimir ocupação.\n\n");
+        return;
+    }
+
     for(int i = 0; i < linhas; i++)
     {
         for(int j = 0; j < colunas; j++)
@@ -414,4 +431,32 @@ void imprime_ocupacao_das_mesas(Mesa** mesas, int linhas, int colunas)
             printf("\n\n");
         }
     }
+}
+
+void retira_pratos_da_mesa_sem_desocupar(Mesa* mesa, Pilha_de_Pratos** pilha)
+{
+    int numero_de_pratos = -1;
+
+    printf("Informe quantos pratos deseja retirar: ");
+    scanf("%d", &numero_de_pratos);
+
+    if(numero_de_pratos < 1 || numero_de_pratos > mesa->lugares_ocupados)
+    {
+        printf("Número de pratos inválido. Tente novamente.\n\n");
+        return;
+    }
+
+    for(int i = mesa->lugares_ocupados - numero_de_pratos; i < mesa->lugares_ocupados; i++)
+    {
+        if(mesa->pratos_utilizados[i] == NULL)
+        {
+            printf("Erro ao retirar pratos da mesa.\n\n");
+            return;
+        }
+
+        empilha_prato(pilha, mesa->pratos_utilizados[i]);
+        mesa->pratos_utilizados[i] = NULL;
+    }
+
+    printf("Pratos retirados com sucesso!\n\n");	
 }
