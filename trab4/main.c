@@ -12,12 +12,10 @@ int main()
     while(true)
     {
         imprime_menu();
-        if(processa_escolha(mesas, &pilha, &fila, linhas, colunas, &restaurante_aberto) == 0) break;
+        if(processa_escolha(&mesas, &pilha, &fila, &linhas, &colunas, &restaurante_aberto) == 0) break;
     }
 
     desaloca_matriz_de_mesas(mesas, linhas);
     desaloca_pilha_de_pratos(&pilha);
     desaloca_fila_de_espera(&fila);
-
-    return 0;
 }
