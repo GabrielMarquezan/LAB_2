@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+typedef struct prato
+{
+    int id;
+} Prato;
+
+
 typedef struct mesa {
     int id;
     bool ocupada;
@@ -21,11 +27,6 @@ typedef struct fila_de_espera
     int tamanho_do_grupo;
     struct fila_de_espera* proximo_grupo;
 } Fila_de_Espera;
-
-typedef struct prato
-{
-    int id;
-} Prato;
 
 typedef struct pilha_de_pratos
 {
@@ -44,14 +45,17 @@ void inicializa_mesas(Mesa** mesas, Pilha_de_Pratos** pilha, int n_linhas, int n
 Fila_de_Espera* cria_fila_de_espera();
 void desaloca_fila_de_espera(Fila_de_Espera** fila);
 void adiciona_grupo_na_fila(Fila_de_Espera** fila);
-int remove_grupo_da_fila(Fila_de_Espera** fila);
-void inicializar_restaurante(Mesa*** mesas, Pilha_de_Pratos** pilha, bool* restaurante_abertos);
+int remove_grupo_da_fila(Fila_de_Espera** fila, bool desistir);
+void inicializar_restaurante(Mesa*** mesas, Pilha_de_Pratos** pilha, int* linhas, int* colunas, bool* restaurante_aberto);
 Mesa* busca_mesa(Mesa** mesas, int linhas, int colunas, int id_mesa);
+Mesa* acha_mesa_livre(Mesa** mesas, int linhas, int colunas);
 void arruma_mesa(Mesa* mesa, Pilha_de_Pratos** pilha);
 void libera_mesa(Fila_de_Espera** fila, Pilha_de_Pratos** pilha, Mesa** mesas, int linhas, int colunas, int id_mesa);
-void ocupa_mesa(Fila_de_Espera** fila, Mesa** mesas, Pilha_de_Pratos** pilha, int id_mesa, int linhas, int colunas);
+Fila_de_Espera* retorna_primeiro_grupo_da_fila(Fila_de_Espera* fila);
+void ocupa_mesa(Fila_de_Espera** fila, Mesa** mesas, Pilha_de_Pratos** pilha, int linhas, int colunas);
 void imprime_pilha_de_pratos(Pilha_de_Pratos* pilha);
 void imprime_fila_de_espera(Fila_de_Espera* fila);
 void imprime_ocupacao_das_mesas(Mesa** mesas, int linhas, int colunas);
+void retira_pratos_da_mesa_sem_desocupar(Mesa* mesa, Pilha_de_Pratos** pilha);
 
 #endif
